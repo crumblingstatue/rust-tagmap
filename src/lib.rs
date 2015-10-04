@@ -1,11 +1,11 @@
-//! A datastructure that allows item lookup based on tag matching.
+//! A container that allows item lookup based on tag matching.
 
 #![warn(missing_docs)]
 
 use std::collections::HashMap;
 use std::hash::Hash;
 
-/// A datastructure that allows item lookup based on tag matching.
+/// A container that allows item lookup based on tag matching.
 #[derive(Debug)]
 pub struct TagMap<T: Eq + Hash, TAG: Eq> {
     entries: HashMap<T, Vec<TAG>>,
