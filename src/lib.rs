@@ -8,7 +8,8 @@ use std::hash::Hash;
 /// A container that allows item lookup based on tag matching.
 #[derive(Debug)]
 pub struct TagMap<T: Eq + Hash, TAG: Eq> {
-    entries: HashMap<T, Vec<TAG>>,
+    /// The inner HashMap used for the implementation.
+    pub entries: HashMap<T, Vec<TAG>>,
 }
 
 impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
