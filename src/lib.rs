@@ -18,7 +18,7 @@ impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
         TagMap { entries: HashMap::new() }
     }
     /// Returns the entries matching the given tags.
-    pub fn entries_matching_tags(&self, tags: &[TAG]) -> Vec<&T> {
+    pub fn matching(&self, tags: &[TAG]) -> Vec<&T> {
         let mut vec = Vec::new();
         'entries: for (k, v) in &self.entries {
             for tag in tags.iter() {
