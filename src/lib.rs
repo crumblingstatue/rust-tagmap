@@ -114,6 +114,7 @@ impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
 }
 
 /// A rule of how to match against tags.
+#[derive(Debug, PartialEq)]
 pub enum MatchRule<TAG> {
     /// Match all given tags.
     Tags(Vec<TAG>),
