@@ -21,8 +21,8 @@ pub struct Matching<'hi, 'r, T: 'static, TAG: 'static> {
 
 fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
     use MatchRule::*;
-    match rule {
-        &Tags(ref m_tags) => {
+    match *rule {
+        Tags(ref m_tags) => {
             let mut count = 0;
             for m_tag in m_tags {
                 for tag in tags {
@@ -33,7 +33,7 @@ fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
             }
             count == m_tags.len()
         }
-        &NotTags(ref m_tags) => {
+        NotTags(ref m_tags) => {
             for m_tag in m_tags {
                 for tag in tags {
                     if *tag == *m_tag {
@@ -43,7 +43,7 @@ fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
             }
             true
         }
-        &AnyTag(ref m_tags) => {
+        AnyTag(ref m_tags) => {
             for m_tag in m_tags {
                 for tag in tags {
                     if *tag == *m_tag {
@@ -53,7 +53,7 @@ fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
             }
             false
         }
-        &Rules(ref rules) => {
+        Rules(ref rules) => {
             let mut count = 0;
             for rule in rules {
                 if tags_match_rule(tags, rule) {
@@ -62,7 +62,7 @@ fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
             }
             count == rules.len()
         }
-        &NotRules(ref rules) => {
+        NotRules(ref rules) => {
             for rule in rules {
                 if tags_match_rule(tags, rule) {
                     return false;
@@ -70,7 +70,7 @@ fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
             }
             true
         }
-        &AnyRule(ref rules) => {
+        AnyRule(ref rules) => {
             for rule in rules {
                 if tags_match_rule(tags, rule) {
                     return true;
