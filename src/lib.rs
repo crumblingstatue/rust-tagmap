@@ -140,8 +140,7 @@ fn test() {
                        vec!["mammal", "herbivore", "small", "furry", "neutral"]);
     map.entries.insert("snake",
                        vec!["reptile", "carnivore", "poisonous", "hostile"]);
-    map.entries.insert("shark",
-                       vec!["fish", "carnivore", "large", "hostile"]);
+    map.entries.insert("shark", vec!["fish", "carnivore", "large", "hostile"]);
     map.entries.insert("human",
                        vec!["mammal", "omnivore", "intelligent", "friendly", "primate"]);
     map.entries.insert("lion",
@@ -164,14 +163,12 @@ fn test() {
     }
     check!(&Tags(vec!["mammal"]),
            [&"human", &"elephant", &"mouse", &"dog", &"lion", &"chimpanzee"]);
-    check!(&Tags(vec!["carnivore", "mammal", "friendly"]),
-           [&"dog"]);
+    check!(&Tags(vec!["carnivore", "mammal", "friendly"]), [&"dog"]);
     check!(&NotTags(vec!["mammal"]),
            [&"snake", &"shark", &"goldfish", &"carp", &"blowfish"]);
     check!(&Rules(vec![Tags(vec!["fish"]), NotTags(vec!["poisonous"])]),
            [&"goldfish", &"carp", &"shark"]);
-    check!(&AnyTag(vec!["canine", "reptile"]),
-           [&"dog", &"snake"]);
+    check!(&AnyTag(vec!["canine", "reptile"]), [&"dog", &"snake"]);
     check!(&AnyRule(vec![
             Rules(vec![
                 Tags(vec!["carnivore"]), NotTags(vec!["friendly"]),
