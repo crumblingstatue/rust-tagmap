@@ -2,15 +2,14 @@
 
 #![warn(missing_docs)]
 
-use std::collections::HashMap;
-use std::collections::hash_map::Iter;
-use std::hash::Hash;
+use std::collections::BTreeMap;
+use std::collections::btree_map::Iter;
 
 /// A container that allows item lookup based on tag matching.
 #[derive(Debug)]
-pub struct TagMap<T: Eq + Hash, TAG: Eq> {
-    /// The inner HashMap used for the implementation.
-    pub entries: HashMap<T, Vec<TAG>>,
+pub struct TagMap<T: Ord, TAG: Eq> {
+    /// The inner BTreeMap used for the implementation.
+    pub entries: BTreeMap<T, Vec<TAG>>,
 }
 
 /// Iterator over entries matching a rule.
@@ -125,10 +124,10 @@ impl<'a, 'b, T: 'a, TAG: 'a + Eq> Iterator for MatchingEntries<'a, 'b, T, TAG> {
     }
 }
 
-impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
+impl<T: Ord, TAG: Eq> TagMap<T, TAG> {
     /// Creates a new empty TagMap.
     pub fn new() -> Self {
-        TagMap { entries: HashMap::new() }
+        TagMap { entries: BTreeMap::new() }
     }
     /// Returns the entries matching the given rule.
     pub fn matching<'s, 'r>(&'s self, rule: &'r MatchRule<TAG>) -> Matching<'s, 'r, T, TAG> {
