@@ -19,6 +19,12 @@ pub struct Matching<'hi, 'r, T: 'static, TAG: 'static> {
     rule: &'r MatchRule<TAG>,
 }
 
+/// Iterator over entries matching a rule. Yields both T and its tags.
+pub struct MatchingEntries<'hi, 'r, T: 'static, TAG: 'static> {
+    iter: Iter<'hi, T, Vec<TAG>>,
+    rule: &'r MatchRule<TAG>,
+}
+
 fn tags_match_rule<TAG: Eq>(tags: &[TAG], rule: &MatchRule<TAG>) -> bool {
     use MatchRule::*;
     match *rule {
@@ -99,6 +105,24 @@ impl<'a, 'b, T: 'a, TAG: 'a + Eq> Iterator for Matching<'a, 'b, T, TAG> {
     }
 }
 
+impl<'a, 'b, T: 'a, TAG: 'a + Eq> Iterator for MatchingEntries<'a, 'b, T, TAG> {
+    type Item = (&'a T, &'a [TAG]);
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            match self.iter.next() {
+                Some((v, tags)) => {
+                    if tags_match_rule(tags, self.rule) {
+                        return Some((v, tags));
+                    } else {
+                        continue;
+                    }
+                }
+                None => return None,
+            }
+        }
+    }
+}
+
 impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
     /// Creates a new empty TagMap.
     pub fn new() -> Self {
@@ -107,6 +131,15 @@ impl<T: Eq + Hash, TAG: Eq> TagMap<T, TAG> {
     /// Returns the entries matching the given rule.
     pub fn matching<'s, 'r>(&'s self, rule: &'r MatchRule<TAG>) -> Matching<'s, 'r, T, TAG> {
         Matching {
+            iter: self.entries.iter(),
+            rule: rule,
+        }
+    }
+    /// Returns the entries matching the given rule. Yields both T and its tags.
+    pub fn matching_entries<'s, 'r>(&'s self,
+                                    rule: &'r MatchRule<TAG>)
+                                    -> MatchingEntries<'s, 'r, T, TAG> {
+        MatchingEntries {
             iter: self.entries.iter(),
             rule: rule,
         }
