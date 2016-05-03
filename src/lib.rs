@@ -14,12 +14,14 @@ pub struct TagMap<T: Eq + Hash, TAG: Eq> {
 }
 
 /// Iterator over entries matching a rule.
+#[derive(Clone)]
 pub struct Matching<'hi, 'r, T: 'static, TAG: 'static> {
     iter: Iter<'hi, T, Vec<TAG>>,
     rule: &'r MatchRule<TAG>,
 }
 
 /// Iterator over entries matching a rule. Yields both T and its tags.
+#[derive(Clone)]
 pub struct MatchingEntries<'hi, 'r, T: 'static, TAG: 'static> {
     iter: Iter<'hi, T, Vec<TAG>>,
     rule: &'r MatchRule<TAG>,
